@@ -27,71 +27,63 @@ export const SidebarProvider = ({
   const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
 
   return (
-    (<SidebarContext.Provider value={{ open, setOpen, animate: animate }}>
+    <SidebarContext.Provider value={{ open, setOpen, animate }}>
       {children}
-    </SidebarContext.Provider>)
+    </SidebarContext.Provider>
   );
 };
 
-export const Sidebar = ({
-  children,
-  open,
-  setOpen,
-  animate
-}) => {
+export const Sidebar = ({ children, open, setOpen, animate }) => {
   return (
-    (<SidebarProvider open={open} setOpen={setOpen} animate={animate}>
+    <SidebarProvider open={open} setOpen={setOpen} animate={animate}>
       {children}
-    </SidebarProvider>)
+    </SidebarProvider>
   );
 };
 
 export const SidebarBody = (props) => {
-  return (<>
-    <DesktopSidebar {...props} />
-    <MobileSidebar {...(props)} />
-  </>);
+  return (
+    <>
+      <DesktopSidebar {...props} />
+      <MobileSidebar {...props} />
+    </>
+  );
 };
 
-export const DesktopSidebar = ({
-  className,
-  children,
-  ...props
-}) => {
+export const DesktopSidebar = ({ className, children, ...props }) => {
   const { open, setOpen, animate } = useSidebar();
-  return (<>
+  return (
     <motion.div
       className={cn(
         "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[500px] flex-shrink-0",
         className
       )}
       animate={{
-        width: animate ? (open ? "300px" : "150px") : "300px",
+        width: animate ? (open ? "300px" : "210px") : "300px",
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
-      {...props}>
+      {...props}
+    >
       {children}
     </motion.div>
-  </>);
+  );
 };
 
-export const MobileSidebar = ({
-  className,
-  children,
-  ...props
-}) => {
+export const MobileSidebar = ({ className, children, ...props }) => {
   const { open, setOpen } = useSidebar();
-  return (<>
+  return (
     <div
       className={cn(
         "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
       )}
-      {...props}>
+      {...props}
+    >
       <div className="flex justify-end z-20 w-full">
         <IconMenu2
           className="text-neutral-800 dark:text-neutral-200"
-          onClick={() => setOpen(!open)} />
+          onClick={() => setOpen(!open)}
+        />
       </div>
       <AnimatePresence>
         {open && (
@@ -106,10 +98,12 @@ export const MobileSidebar = ({
             className={cn(
               "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
               className
-            )}>
+            )}
+          >
             <div
               className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
-              onClick={() => setOpen(!open)}>
+              onClick={() => setOpen(!open)}
+            >
               <IconX />
             </div>
             {children}
@@ -117,29 +111,29 @@ export const MobileSidebar = ({
         )}
       </AnimatePresence>
     </div>
-  </>);
+  );
 };
 
-export const SidebarLink = ({
-  link,
-  className,
-  ...props
-}) => {
-  const { open, animate } = useSidebar();
+export const SidebarLink = ({ link, onClick, className }) => {
+  const { label, href, icon } = link;
+
   return (
-    (<Link
-      href={link.href}
-      className={cn("flex items-center justify-start gap-2  group/sidebar py-2", className)}
-      {...props}>
-      {link.icon}
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-black font-bold dark:text-neutral-200 text-lg group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0">
-        {link.label}
-      </motion.span>
-    </Link>)
+    <div className={className}>
+      {href ? (
+        <Link to={href} onClick={onClick}>
+          <div className="flex items-center gap-2">
+            {icon}
+            <span>{label}</span>
+          </div>
+        </Link>
+      ) : (
+        <button onClick={onClick} className="w-full text-left">
+          <div className="flex items-center gap-2">
+            {icon}
+            <span>{label}</span>
+          </div>
+        </button>
+      )}
+    </div>
   );
 };

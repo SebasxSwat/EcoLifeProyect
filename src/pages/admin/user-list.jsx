@@ -35,7 +35,7 @@ const initialUsers = [
   { id: '5', name: 'Laura Sánchez', email: 'laura@ecolife.com', role: 'Coordinador', status: 'active', ecoScore: 95 },
 ]
 
-export function AdminUserList() {
+export default function AdminUserList() {
   const [users, setUsers] = useState(initialUsers)
   const [searchTerm, setSearchTerm] = useState('')
 

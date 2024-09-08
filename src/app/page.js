@@ -1,8 +1,7 @@
 "use client";
 
-import { SidebarDemo } from "@/components/features/SidebarDemo";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { AdminUserList } from "@/components/pages/admin/admin-user-list";
+import { SidebarDemo } from "@/components/admin/SidebarDemo";
 
 export default function Home() {
   return (
