@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
-from backend import db  
-from backend.models.huellaCarbono import HuellaCarbono  
-from backend.models.user import Usuario  
+from app import db  
+from app.models.huellaCarbono import HuellaCarbono  
+from app.models.user import Usuario  
 
 bp = Blueprint('HuellaCarbono', __name__)
 
