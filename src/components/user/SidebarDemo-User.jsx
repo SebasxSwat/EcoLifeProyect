@@ -88,7 +88,7 @@ export function SidebarDemoUser() {
   };
 
   return (
-    <div className="rounded-md flex flex-col md:flex-row w-screen text-lg font-bold bg-gray-100 dark:bg-neutral-800 flex-1 max-w-8xl mx-auto border border-neutral-200 dark:border-black overflow-hidden h-screen">
+    <div className="rounded-md flex flex-col md:flex-row w-screen text-lg font-bold bg-gray-100 dark:bg-neutral-800 flex-1 max-w-8xl mx-auto border border-neutral-200 dark:border-black overflow-hidden min-h-screen">
       <Sidebar open={open} setOpen={setOpen} className="w-96">
         <SidebarBody className="justify-between gap-10 bg-gray-800 dark:bg-neutral-900 text-white dark:text-white border-2 border-neutral-700 dark:border-neutral-600 rounded-lg">
           <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">

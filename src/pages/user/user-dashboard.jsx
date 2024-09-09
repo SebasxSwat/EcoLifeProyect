@@ -127,10 +127,12 @@ const UserDashboard = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={userData.activities}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
+                      <XAxis dataKey="date" 
+                      tick={{ fontSize: 12 }}/>
+                      <YAxis 
+                       tick={{ fontSize: 14 }}/>
                       <Tooltip />
-                      <Line type="monotone" dataKey="score" stroke="#10B981" strokeWidth={2} />
+                      <Line type="monotone" dataKey="score" stroke="#10B981" strokeWidth={2 } />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
