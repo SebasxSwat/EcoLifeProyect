@@ -54,7 +54,7 @@ const UserDashboard = () => {
                 <AvatarFallback>{userData.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="text-3xl font-bold text-green-800">Bienvenida, {userData.name}</CardTitle>
+                <CardTitle className="text-3xl font-bold text-green-600">Bienvenida, {userData.name}</CardTitle>
                 <CardDescription className="text-lg text-green-600">
                   Tu Eco-Dashboard Personal
                 </CardDescription>
@@ -74,7 +74,7 @@ const UserDashboard = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Huella de Carbono</p>
+                    <p className="text-sm font-medium text-gray-400">Huella de Carbono</p>
                     <p className="text-2xl font-bold text-green-600">{userData.carbonFootprint} ton</p>
                   </div>
                   <Leaf className="h-10 w-10 text-green-500" />
@@ -86,7 +86,7 @@ const UserDashboard = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Árboles Plantados</p>
+                    <p className="text-sm font-medium text-gray-400">Árboles Plantados</p>
                     <p className="text-2xl font-bold text-green-600">{userData.treesPlanted}</p>
                   </div>
                   <TreeDeciduous className="h-10 w-10 text-green-500" />
@@ -97,7 +97,7 @@ const UserDashboard = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Residuos Reciclados</p>
+                    <p className="text-sm font-medium text-gray-400">Residuos Reciclados</p>
                     <p className="text-2xl font-bold text-green-600">{userData.wasteRecycled} kg</p>
                   </div>
                   <Recycle className="h-10 w-10 text-green-500" />
@@ -108,7 +108,7 @@ const UserDashboard = () => {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Agua Ahorrada</p>
+                    <p className="text-sm font-medium text-gray-400">Agua Ahorrada</p>
                     <p className="text-2xl font-bold text-green-600">{userData.waterSaved} L</p>
                   </div>
                   <Droplet className="h-10 w-10 text-blue-500" />
