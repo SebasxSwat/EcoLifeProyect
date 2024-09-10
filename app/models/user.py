@@ -10,7 +10,6 @@ class Users(db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
-    is_admin = db.Column(db.Boolean, default=False)
     eco_score = db.Column(db.Integer, default=0)
     carbon_footprint = db.Column(db.Float, default=0.0)
 
