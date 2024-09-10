@@ -1,6 +1,6 @@
 "use client";
 
-import UserRegistration from "@/pages/auth/user-registration";
+import UserRegistration from "@/pages/user-registration";
 
 export default function Home() {
   return (
