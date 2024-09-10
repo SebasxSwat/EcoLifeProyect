@@ -1,10 +1,11 @@
 from backend import db
 
-class DesafioUsuario(db.Model):
-    __tablename__ = 'desafio_usuario'
-
+class UserChallenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('usuario.idUser'), nullable=False)
-    desafio_id = db.Column(db.Integer, db.ForeignKey('desafio.id'), nullable=False)
-    fecha_completado = db.Column(db.DateTime)
-    progreso = db.Column(db.Integer, nullable=False, default=0)  # Valor entre 0 y 100
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=False)
+    status = db.Column(db.String(20), default='available') 
+    completed_at = db.Column(db.DateTime)
+
+    user = db.relationship('User', back_populates='challenges')
+    challenge = db.relationship('Challenge', back_populates='user_challenges')

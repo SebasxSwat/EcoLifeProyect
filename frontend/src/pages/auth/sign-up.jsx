@@ -58,7 +58,7 @@ export default function SignUp() {
             id="email"
             type="text"
             placeholder="example: email@gmail.com"
-            className="w-full bg-transparent border border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600"
+            className="w-full bg-transparent border border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600 text-white"
           />
         </div>
         <div className="mt-8 w-3/4">
@@ -69,7 +69,7 @@ export default function SignUp() {
             id="password"
             type="password"
             placeholder="********"
-            className="w-full bg-transparent border border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600"
+            className="w-full bg-transparent border text-white border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600"
           />
         </div>
         <div className="mt-8 w-3/4">
@@ -83,7 +83,7 @@ export default function SignUp() {
             id="repeat-password"
             type="password"
             placeholder="********"
-            className="w-full bg-transparent border border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600"
+            className="w-full bg-transparent border text-white border-gray-400 py-2 px-4 rounded-lg focus:outline-none focus:border-gray-600"
           />
         </div>
         <div className="mt-8 w-3/4">

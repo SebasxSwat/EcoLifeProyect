@@ -1,15 +1,13 @@
 from backend import db
+from datetime import datetime
 
-class Desafio(db.Model):
-    __tablename__ = 'desafio'
-
+class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    titulo = db.Column(db.String(255), nullable=False)
-    descripcion = db.Column(db.Text, nullable=False)
-    categoria = db.Column(db.String(50), nullable=False)  # transporte, energia, alimentacion, consumo
-    fecha_inicio = db.Column(db.DateTime, nullable=False)
-    fecha_fin = db.Column(db.DateTime, nullable=False)
-    recompensa_puntos = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    goal = db.Column(db.String(255), nullable=False)
+    reward = db.Column(db.Integer, nullable=False)  
+    icon = db.Column(db.String(50)) 
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relaciones
-    desafios_usuario = db.relationship('DesafioUsuario', backref='desafio', lazy=True)
+    user_challenges = db.relationship('UserChallenge', back_populates='challenge')
