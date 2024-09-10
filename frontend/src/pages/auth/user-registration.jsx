@@ -58,7 +58,7 @@ const UserRegistration = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+        className=" rounded-lg shadow-xl p-8 max-w-md w-full">
         <div className="flex items-center justify-center mb-8">
           <Leaf className="text-green-500 h-12 w-12 mr-2" />
           <h1 className="text-3xl font-bold text-green-800">EcoLife</h1>
