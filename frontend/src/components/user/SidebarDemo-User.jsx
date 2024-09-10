@@ -9,6 +9,8 @@ import {
 import { DarkMode } from "../ui/darkMode";
 import { motion } from "framer-motion";
 import UserDashboard from "@/pages/user/user-dashboard";
+import UserProfile from "@/pages/user/user-profile";
+import UserChallenges from "@/pages/user/user-challenges";
 
 export function SidebarDemoUser() {
   const [open, setOpen] = useState(false);
@@ -30,19 +32,11 @@ export function SidebarDemoUser() {
       ),
     },
     {
-      label: "User",
-      id: "user",
+      label: "Challenge",
+      id: "challenge",
       icon: (
         <IconSettings className="text-white dark:text-white h-8 w-10 flex-shrink-0" />
       ),
-      submenu: [
-        { label: "List Users", id: "user-list", icon: null },
-        {
-          label: "Average Carbon Footprint",
-          id: "average-carbon-footprint",
-          icon: null,
-        },
-      ],
     },
     {
       label: "Logout",
@@ -76,9 +70,9 @@ export function SidebarDemoUser() {
   const renderMainContent = () => {
     switch (currentPage) {
       case "profile":
-        return <ViewProfile />;
-      case "user-list":
-        return <AdminUserList />;
+        return <UserProfile />;
+      case "challenge":
+        return <UserChallenges />;
       case "average-carbon-footprint":
         return <AverageCarbonFootprint />;
       case "dashboard":
