@@ -2,9 +2,9 @@ from flask import Blueprint, request, jsonify
 from app.models.user import Users  # Importa tu modelo de usuario
 from app import db
 
-auth = Blueprint('auth', __name__)
+bp = Blueprint('auth', __name__)
 
-@auth.route('/register', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def register():
     
     data = request.get_json()
@@ -26,7 +26,7 @@ def register():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-@auth.route('/login', methods=['POST'])
+@bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email')

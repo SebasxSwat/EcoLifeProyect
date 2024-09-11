@@ -6,7 +6,7 @@ from app.models.challenge import Challenge
 bp = Blueprint('challenges', __name__)
 
 # Ruta para listar todos los desafíos y renderizar el template
-@bp.route('/', methods=['GET'])
+@bp.route('/X', methods=['GET'])
 def list_challenges():
     challenges = Challenge.query.all()
     return render_template('challenges.html', challenges=challenges)

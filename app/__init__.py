@@ -14,8 +14,12 @@ def create_app():
     db.init_app(app)
 
     from app.routes import auth_routes
+    from app.routes import badge_routes
+    from app.routes import challenges_routes
 
-    app.register_blueprint(auth_routes.bp)  # Usa '/auth' como prefijo para las rutas de login
+    app.register_blueprint(auth_routes.bp)
+    app.register_blueprint(badge_routes.bp)
+    app.register_blueprint(challenges_routes.bp)  # Usa '/auth' como prefijo para las rutas de login
     
     # Crear tablas en la base de datos si no existen
     with app.app_context():
