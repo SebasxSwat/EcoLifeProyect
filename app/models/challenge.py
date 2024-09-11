@@ -12,16 +12,11 @@ class Challenge(db.Model):
     icon = db.Column(db.String(50)) 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user_challenges = db.relationship('UserChallenge', back_populates='challenge')
+    # Relación con UserChallenge
+    user_challenges = db.relationship('UserChallenge', back_populates='challenge', cascade='all, delete-orphan')
 
-    # Método para convertir el modelo a un diccionario (JSON serializable)
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'description': self.description,
-            'goal': self.goal,
-            'reward': self.reward,
-            'icon': self.icon,
-            'created_at': self.created_at.isoformat()  # Formato de fecha compatible con JSON
-        }
+    # Relación secundaria con Users
+    users_completed = db.relationship('Users', secondary='user_challenges', back_populates='completed_challenges')
+
+    def __repr__(self):
+        return f'<Challenge {self.title}>'

@@ -3,9 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from app import db
 from app.models.userChallenge import UserChallenge
+from app.models.challenge import Challenge
 
 class Users(db.Model):
-    __tablename__ = 'users'  # Cambié el nombre de la tabla a 'users' para que coincida con la relación
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
@@ -16,8 +17,10 @@ class Users(db.Model):
     date_registered = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
 
-    # Relaciones
+    # Relación con UserChallenge
     user_challenges = db.relationship('UserChallenge', back_populates='user', cascade='all, delete-orphan')
+
+    # Relación secundaria con Challenge
     completed_challenges = db.relationship('Challenge', secondary='user_challenges', back_populates='users_completed')
 
     def set_password(self, password):
@@ -36,9 +39,9 @@ class Users(db.Model):
 
     def complete_challenge(self, challenge):
         if challenge not in self.completed_challenges:
-            user_challenge = UserChallenge(user_id=self.id, challenge_id=challenge.id, points_earned=challenge.points)
+            user_challenge = UserChallenge(user_id=self.id, challenge_id=challenge.id, points_earned=challenge.reward)
             db.session.add(user_challenge)
-            self.update_eco_score(challenge.points)
+            self.update_eco_score(challenge.reward)
             db.session.commit()
 
     def __repr__(self):
