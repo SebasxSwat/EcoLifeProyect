@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 
 class Challenge(db.Model):
     __tablename__ = 'challenges'
@@ -6,13 +7,16 @@ class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    points = db.Column(db.Integer, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    goal = db.Column(db.String(255), nullable=False)
+    reward = db.Column(db.Integer, nullable=False)  
+    icon = db.Column(db.String(50)) 
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relaciones
-    category = db.relationship('Category', back_populates='challenges')
+    # Relación con UserChallenge
     user_challenges = db.relationship('UserChallenge', back_populates='challenge', cascade='all, delete-orphan')
-    users_completed = db.relationship('User', secondary='user_challenges', back_populates='completed_challenges')
+
+    # Relación secundaria con Users
+    users_completed = db.relationship('Users', secondary='user_challenges', back_populates='completed_challenges')
 
     def __repr__(self):
         return f'<Challenge {self.title}>'

@@ -1,0 +1,44 @@
+<!-- templates/challenges.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecolife Challenges</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Ecolife Challenges</h1>
+        <table class="challenges-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Goal</th>
+                    <th>Reward</th>
+                    <th>Icon</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for challenge in challenges %}
+                <tr>
+                    <td>{{ challenge.title }}</td>
+                    <td>{{ challenge.description }}</td>
+                    <td>{{ challenge.goal }}</td>
+                    <td>{{ challenge.reward }} points</td>
+                    <td>
+                        {% if challenge.icon %}
+                            <img src="{{ url_for('static', filename='icons/' + challenge.icon) }}" alt="Icon" width="50">
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="create_badge.html">Crear</a>
+</body>
+</html>
