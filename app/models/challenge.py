@@ -20,3 +20,16 @@ class Challenge(db.Model):
 
     def __repr__(self):
         return f'<Challenge {self.title}>'
+
+    def jsonfy(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'goal': self.goal,
+            'reward': self.reward,
+            'icon': self.icon,
+            'created_at': self.created_at.isoformat(),  # Formato de fecha ISO 8601
+            'user_challenges': [uc.jsonfy() for uc in self.user_challenges],  # Asumiendo que UserChallenge también tiene un método jsonfy
+            'users_completed': [user.jsonfy() for user in self.users_completed]  # Asumiendo que Users también tiene un método jsonfy
+        }
