@@ -15,6 +15,7 @@ class Users(db.Model):
     carbon_footprint = db.Column(db.Float, default=0.0)
     date_registered = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
+    
 
     # Relaciones
     user_challenges = db.relationship('UserChallenge', back_populates='user', cascade='all, delete-orphan')
