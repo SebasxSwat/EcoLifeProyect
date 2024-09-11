@@ -13,3 +13,15 @@ class Challenge(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_challenges = db.relationship('UserChallenge', back_populates='challenge')
+
+    # Método para convertir el modelo a un diccionario (JSON serializable)
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'goal': self.goal,
+            'reward': self.reward,
+            'icon': self.icon,
+            'created_at': self.created_at.isoformat()  # Formato de fecha compatible con JSON
+        }
