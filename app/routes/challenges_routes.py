@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from app import db
-from models import Challenge
+from app.models.challenge import Challenge
 
 # Crear un Blueprint para las rutas de desafíos
 challenges_bp = Blueprint('challenges', __name__)
