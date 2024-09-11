@@ -3,16 +3,16 @@ from app import db
 from app.models.challenge import Challenge
 
 # Crear un Blueprint para las rutas de desafíos
-challenges_bp = Blueprint('challenges', __name__)
+bp = Blueprint('challenges', __name__)
 
 # Ruta para listar todos los desafíos y renderizar el template
-@challenges_bp.route('/challenges', methods=['GET'])
+@bp.route('/challenges', methods=['GET'])
 def list_challenges():
     challenges = Challenge.query.all()
     return render_template('challenges.html', challenges=challenges)
 
 # Ruta para obtener todos los desafíos en formato JSON
-@challenges_bp.route('/api/challenges', methods=['GET'])
+@bp.route('/api/challenges', methods=['GET'])
 def get_challenges():
     challenges = Challenge.query.all()
     result = []
@@ -29,7 +29,7 @@ def get_challenges():
     return jsonify(result)
 
 # Ruta para crear un nuevo desafío
-@challenges_bp.route('/api/challenges', methods=['POST'])
+@bp.route('/api/challenges', methods=['POST'])
 def create_challenge():
     data = request.get_json()
     new_challenge = Challenge(
@@ -44,7 +44,7 @@ def create_challenge():
     return jsonify({'message': 'Challenge created successfully!'}), 201
 
 # Ruta para obtener un desafío específico por ID
-@challenges_bp.route('/api/challenges/<int:id>', methods=['GET'])
+@bp.route('/api/challenges/<int:id>', methods=['GET'])
 def get_challenge(id):
     challenge = Challenge.query.get_or_404(id)
     return jsonify({
@@ -58,7 +58,7 @@ def get_challenge(id):
     })
 
 # Ruta para actualizar un desafío existente
-@challenges_bp.route('/api/challenges/<int:id>', methods=['PUT'])
+@bp.route('/api/challenges/<int:id>', methods=['PUT'])
 def update_challenge(id):
     challenge = Challenge.query.get_or_404(id)
     data = request.get_json()
@@ -73,7 +73,7 @@ def update_challenge(id):
     return jsonify({'message': 'Challenge updated successfully!'})
 
 # Ruta para eliminar un desafío
-@challenges_bp.route('/api/challenges/<int:id>', methods=['DELETE'])
+@bp.route('/api/challenges/<int:id>', methods=['DELETE'])
 def delete_challenge(id):
     challenge = Challenge.query.get_or_404(id)
     db.session.delete(challenge)

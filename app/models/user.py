@@ -5,7 +5,7 @@ from app import db
 from app.models.userChallenge import UserChallenge
 
 class Users(db.Model):
-    __tablename__ = 'user' 
+    __tablename__ = 'users'  # Cambié el nombre de la tabla a 'users' para que coincida con la relación
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
