@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 class Badge(db.Model):
+    __tablename__ = 'badge'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
