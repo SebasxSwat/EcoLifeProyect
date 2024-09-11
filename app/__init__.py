@@ -13,9 +13,9 @@ def create_app():
     # Inicializa la extensión SQLAlchemy con la aplicación Flask
     db.init_app(app)
 
-    from app.routes import auth
+    from app.routes import auth_routes
 
-    app.register_blueprint(auth.bp)  # Usa '/auth' como prefijo para las rutas de login
+    app.register_blueprint(auth_routes.bp)  # Usa '/auth' como prefijo para las rutas de login
     
     # Crear tablas en la base de datos si no existen
     with app.app_context():
