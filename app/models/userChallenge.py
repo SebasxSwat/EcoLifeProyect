@@ -18,6 +18,3 @@ class UserChallenge(db.Model):
         self.user_id = user_id
         self.challenge_id = challenge_id
         self.points_earned = points_earned
-
-    def __repr__(self):
-        return f'<UserChallenge user_id={self.user_id} challenge_id={self.challenge_id}>'

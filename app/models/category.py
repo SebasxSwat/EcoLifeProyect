@@ -9,5 +9,3 @@ class Category(db.Model):
     # Relaciones
     challenges = db.relationship('Challenge', back_populates='category', cascade='all, delete-orphan')
 
-    def __repr__(self):
-        return f'<Category {self.name}>'
