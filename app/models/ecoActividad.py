@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 class EcoActivity(db.Model):
+    __tablename__ = 'ecoactividad'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Corregido 'user.id' a 'users.id'
     activity_type = db.Column(db.String(50), nullable=False)

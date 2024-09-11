@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 class Notification(db.Model):
+    __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Corregido 'user.id' a 'users.id'
     message = db.Column(db.Text, nullable=False)
