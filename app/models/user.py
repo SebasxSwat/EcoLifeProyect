@@ -4,14 +4,24 @@ from datetime import datetime
 from app import db
 from app.models.userChallenge import UserChallenge
 
+<<<<<<< HEAD
+class Users(db.Model):
+    __tablename__ = 'user' 
+=======
 class User(db.Model):
     __tablename__ = 'users'
+>>>>>>> e91d54e76d74dd896748e3d942a10dd3eb0702f5
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+<<<<<<< HEAD
+    password_hash = db.Column(db.String(128))
+    eco_score = db.Column(db.Integer, default=0)        
+=======
     password_hash = db.Column(db.String(128), nullable=False)
     eco_score = db.Column(db.Integer, default=0)
+>>>>>>> e91d54e76d74dd896748e3d942a10dd3eb0702f5
     carbon_footprint = db.Column(db.Float, default=0.0)
     date_registered = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
