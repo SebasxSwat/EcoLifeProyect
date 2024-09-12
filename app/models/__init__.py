@@ -1,2 +1,1 @@
-from app.models.user import Users
-from app.models.insignia import Insignia
+from app.models.user import User
