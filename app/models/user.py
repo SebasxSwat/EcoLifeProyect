@@ -16,7 +16,7 @@ class Users(db.Model):
     carbon_footprint = db.Column(db.Float, default=0.0)
     date_registered = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime)
-
+    
     # Relación con UserChallenge
     user_challenges = db.relationship('UserChallenge', back_populates='user', cascade='all, delete-orphan')
 
@@ -46,3 +46,15 @@ class Users(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+    def jsonfy(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'eco_score': self.eco_score,
+            'carbon_footprint': self.carbon_footprint,
+            'date_registered': self.date_registered.isoformat() if self.date_registered else None,
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+            'completed_challenges': [challenge.jsonfy() for challenge in self.completed_challenges]  # Asumiendo que Challenge también tiene un método jsonfy
+        }
