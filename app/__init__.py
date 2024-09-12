@@ -17,14 +17,12 @@ def create_app():
 
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-    from app.routes import auth_routes, challenges_routes, badge_routes, api
+    from app.routes import auth_routes, challenges_routes, api
 
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(challenges_routes.bp)
-    app.register_blueprint(badge_routes.bp)
     app.register_blueprint(api.bp)
     
-    # Crear tablas en la base de datos si no existen
     with app.app_context():
         db.create_all()
 
