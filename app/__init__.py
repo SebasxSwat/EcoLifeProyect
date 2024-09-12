@@ -24,7 +24,6 @@ def create_app():
     app.register_blueprint(badge_routes.bp)
     app.register_blueprint(api.bp)
     
-    # Crear tablas en la base de datos si no existen
     with app.app_context():
         db.create_all()
 
