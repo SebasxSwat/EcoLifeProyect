@@ -1,9 +1,11 @@
 from app import db
 
-class Badge(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text)
-    icon = db.Column(db.String(50))
+class Insignia(db.Model):
 
-    user_badges = db.relationship('UserBadge', back_populates='badge')
+    __tablename__ = 'insignias'
+
+    id = db.Column(db.Integer, primary_key=True)  
+    name = db.Column(db.String(100), nullable=False)
+    icon = db.Column(db.String(200), nullable=False) 
+    
+    user_badges = db.relationship('UserBadge', back_populates='insignias')
