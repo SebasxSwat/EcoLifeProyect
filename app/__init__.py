@@ -15,7 +15,7 @@ def create_app():
 
     from app.routes import auth_routes
 
-    app.register_blueprint(auth_routes.bp)  # Usa '/auth' como prefijo para las rutas de login
+    app.register_blueprint(auth_routes.auth)  # Usa '/auth' como prefijo para las rutas de login
     
     # Crear tablas en la base de datos si no existen
     with app.app_context():
