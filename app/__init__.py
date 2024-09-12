@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager   
 
 db = SQLAlchemy()
 
@@ -17,9 +17,9 @@ def create_app():
 
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-    from app.routes import login_routes, challenges_routes, badge_routes
+    from app.routes import auth_routes, challenges_routes, badge_routes
 
-    app.register_blueprint(login_routes.bp)
+    app.register_blueprint(auth_routes.bp)
     app.register_blueprint(challenges_routes.bp)
     app.register_blueprint(badge_routes.bp)
 
