@@ -1,40 +1,34 @@
 from flask import Blueprint, request, jsonify
-from app.models.user import Users  # Importa tu modelo de usuario
+from werkzeug.security import generate_password_hash
+from app.models import User
 from app import db
 
-bp = Blueprint('auth', __name__)
+bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/', methods=['POST'])
+@bp.route('/register', methods=['POST'])
 def register():
-    
-    data = request.get_json()
+    data = request.json
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     if not username or not email or not password:
-        return jsonify({'error': 'Missing fields'}), 400
+        return jsonify({'success': False, 'message': 'Faltan datos requeridos'}), 400
 
-    user = Users(username=username, email=email)
-    user.set_password(password)
+    if User.query.filter_by(username=username).first():
+        return jsonify({'success': False, 'message': 'El nombre de usuario ya existe'}), 400
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'success': False, 'message': 'El email ya está registrado'}), 400
+
+    hashed_password = generate_password_hash(password)
+    new_user = User(username=username, email=email, password_hash=hashed_password)
     
-    try:
-        db.session.add(user)
-        db.session.commit()
-        return jsonify({'message': 'User registered successfully'}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+    db.session.add(new_user)
+    db.session.commit()
 
-@bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-
-    user = Users.query.filter_by(email=email).first()
-
-    if user is None or not user.check_password(password):
-        return jsonify({'error': 'Invalid credentials'}), 401
-
-    return jsonify({'message': 'Login successful', 'user': {'id': user.id, 'username': user.username}}), 200
+    return jsonify({
+        'success': True,
+        'message': 'Usuario registrado exitosamente',
+        'userId': new_user.id
+    }), 201
