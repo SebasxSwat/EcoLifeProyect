@@ -2,10 +2,8 @@ from flask import Blueprint, request, jsonify, render_template
 from app import db
 from app.models.challenge import Challenge
 
-# Crear un Blueprint para las rutas de desafíos
 bp = Blueprint('challenges', __name__)
 
-# Ruta para listar todos los desafíos y renderizar el template
 @bp.route('/', methods=['GET'])
 def list_challenges():
     challenges = Challenge.query.all()
@@ -28,7 +26,6 @@ def get_challenges():
         })
     return jsonify(result)
 
-# Ruta para crear un nuevo desafío
 @bp.route('/api/challenges', methods=['POST'])
 def create_challenge():
     data = request.get_json()
@@ -43,7 +40,6 @@ def create_challenge():
     db.session.commit()
     return jsonify({'message': 'Challenge created successfully!'}), 201
 
-# Ruta para obtener un desafío específico por ID
 @bp.route('/api/challenges/<int:id>', methods=['GET'])
 def get_challenge(id):
     challenge = Challenge.query.get_or_404(id)
@@ -57,7 +53,6 @@ def get_challenge(id):
         'created_at': challenge.created_at.isoformat()
     })
 
-# Ruta para actualizar un desafío existente
 @bp.route('/api/challenges/<int:id>', methods=['PUT'])
 def update_challenge(id):
     challenge = Challenge.query.get_or_404(id)
@@ -72,7 +67,6 @@ def update_challenge(id):
     db.session.commit()
     return jsonify({'message': 'Challenge updated successfully!'})
 
-# Ruta para eliminar un desafío
 @bp.route('/api/challenges/<int:id>', methods=['DELETE'])
 def delete_challenge(id):
     challenge = Challenge.query.get_or_404(id)
