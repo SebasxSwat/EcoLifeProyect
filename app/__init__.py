@@ -13,9 +13,9 @@ def create_app():
     db.init_app(app)
 
 
-    from app.routes import userRoute
+    from app.routes import authRoute
 
-    app.register_blueprint(userRoute.bp)
+    app.register_blueprint(authRoute.bp)
 
     
     with app.app_context():
