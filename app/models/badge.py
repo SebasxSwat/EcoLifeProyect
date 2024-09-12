@@ -14,7 +14,7 @@ class Badge(db.Model):
     def __repr__(self):
         return f'<Badge name={self.name}>'
 
-    def jsonfy(self):
+    def to_json(self):
         return {
             'id': self.id,
             'name': self.name,

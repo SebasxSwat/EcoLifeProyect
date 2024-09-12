@@ -47,7 +47,7 @@ class Users(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
-    def jsonfy(self):
+    def to_json(self):
         return {
             'id': self.id,
             'username': self.username,

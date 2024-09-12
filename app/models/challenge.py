@@ -21,7 +21,7 @@ class Challenge(db.Model):
     def __repr__(self):
         return f'<Challenge {self.title}>'
 
-    def jsonfy(self):
+    def to_json(self):
         return {
             'id': self.id,
             'title': self.title,
