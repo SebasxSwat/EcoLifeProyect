@@ -7,7 +7,6 @@ import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-# Ruta para el registro de usuarios
 @bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -19,8 +18,12 @@ def register():
     email = data['email']
     password = data['password']
     
+    if User.query.filter_by(username=username).first():
+        return jsonify({"message": "El nombre de usuario ya está registrado"}), 400
+    
     if User.query.filter_by(email=email).first():
         return jsonify({"message": "El correo electrónico ya está registrado"}), 400
+    
 
     user = User(username=username, email=email, password=password)
     db.session.add(user)
