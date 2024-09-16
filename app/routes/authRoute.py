@@ -11,12 +11,16 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     data = request.get_json()
 
-    if not all(key in data for key in ('username', 'email', 'password')):
+    if not all(key in data for key in ('username', 'email', 'password', 'name', 'lastname', 'phone')):
         return jsonify({"message": "Faltan campos requeridos"}), 400
 
+    name = data["name"]
+    lastname = data["lastname"]
+    phone = data["phone"]
     username = data['username']
     email = data['email']
     password = data['password']
+    
     
     if User.query.filter_by(username=username).first():
         return jsonify({"message": "El nombre de usuario ya está registrado"}), 400
