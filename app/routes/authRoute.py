@@ -48,7 +48,9 @@ def login():
 
     token = jwt.encode({
         'user_id': user.id,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        'username': user.username,
+        'email': user.email,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, 'fabian_es_gay', algorithm='HS256')
 
     return jsonify({
