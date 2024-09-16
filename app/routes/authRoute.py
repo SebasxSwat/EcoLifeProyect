@@ -29,7 +29,7 @@ def register():
         return jsonify({"message": "El correo electrónico ya está registrado"}), 400
     
 
-    user = User(username=username, email=email, password=password)
+    user = User(username=username, email=email, password=password, name=name, lastname=lastname, phone=phone)
     db.session.add(user)
     db.session.commit()
 
@@ -37,6 +37,7 @@ def register():
 
 @bp.route('/login', methods=['POST'])
 def login():
+
     data = request.get_json()
 
     if not all(key in data for key in ('username', 'password')):
@@ -44,6 +45,7 @@ def login():
 
     username = data['username']
     password = data['password']
+
     
     user = User.query.filter_by(username=username).first()
 
@@ -54,6 +56,9 @@ def login():
         'user_id': user.id,
         'username': user.username,
         'email': user.email,
+        'phone': user.phone,
+        'name': user.name,
+        'lastname': user.lastname,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, 'fabian_es_gay', algorithm='HS256')
 
