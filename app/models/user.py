@@ -9,7 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(128))
     eco_score = db.Column(db.Integer, default=0)        
-    carbon_footprint = db.Column(db.Float, default=0.0)
+    carbon_footprint = db.Column(db.Float, default=0.0) 
 
     def to_json(self):
         return {

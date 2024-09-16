@@ -1,9 +1,8 @@
-from flask import Flask
+from flask import Flask 
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_cors import CORS
 
 db = SQLAlchemy()
-
 
 def create_app():
     app = Flask(__name__)
@@ -12,14 +11,14 @@ def create_app():
 
     db.init_app(app)
 
-
-    from app.routes import userRoute
-
-    app.register_blueprint(userRoute.bp)
-
     
+    CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
+
+    from app.routes import authRoute
+
+    app.register_blueprint(authRoute.bp)
+
     with app.app_context():
         db.create_all()
 
     return app
- 
