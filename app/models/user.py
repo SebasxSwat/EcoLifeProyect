@@ -16,7 +16,7 @@ class User(db.Model):
 
     carbon_footprint = db.relationship('CarbonFootprint', back_populates='user', uselist=False)
     completed_challenges = db.relationship('CompletedChallenge', back_populates='user')
-    badges = db.relationship('Badge', secondary='user_badges', back_populates='user')        
+    badges = db.relationship('Badge', back_populates='user')        
 
     def to_json(self):
         return {
