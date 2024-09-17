@@ -12,7 +12,7 @@ def create_app():
     db.init_app(app)
 
     
-    CORS(app, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
     from app.routes import authRoute, userRoutes
 

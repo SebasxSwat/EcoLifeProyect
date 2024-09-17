@@ -35,7 +35,7 @@ def register():
 
     return jsonify({"message": "Registro exitoso"}), 201
 
-@bp.route('/login', methods=['POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
 
     data = request.get_json()
@@ -53,7 +53,7 @@ def login():
         return jsonify({"message": "Credenciales incorrectas"}), 401
 
     token = jwt.encode({
-        'user_id': user.id,
+        'id': user.id,
         'username': user.username,
         'email': user.email,
         'phone': user.phone,
