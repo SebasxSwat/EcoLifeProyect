@@ -10,7 +10,7 @@ class Badge(db.Model):
     required_challenges = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    users = db.relationship('User', back_populates='badges')
+    user = db.relationship('User', back_populates='badges')
 
     def to_json(self):
         return{
