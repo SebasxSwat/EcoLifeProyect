@@ -28,3 +28,15 @@ def save_carbon_footprint():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "An error occurred while saving the carbon footprint"}), 500
+
+@bp.route('/get/<int:user_id>', methods=['GET'])
+def get_carbon_footprint(user_id):
+    footprint = CarbonFootprint.query.filter_by(user_id=user_id).first()
+    
+    if footprint:
+        return jsonify({
+            "user_id": footprint.user_id,
+            "value": footprint.value
+        }), 200
+    else:
+        return jsonify({"message": "No carbon footprint found for this user"}), 404
