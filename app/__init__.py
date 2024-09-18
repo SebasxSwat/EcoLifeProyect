@@ -1,6 +1,8 @@
-from flask import Flask 
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+import datetime
 
 db = SQLAlchemy()
 
@@ -11,13 +13,18 @@ def create_app():
 
     db.init_app(app)
 
-    
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-    from app.routes import authRoute, userRoutes
+    app.config['JWT_SECRET_KEY'] = 'ecolifepassword'  
+    app.config['JWT_ALGORITHM'] = 'HS256' 
 
+
+    jwt = JWTManager(app)
+
+    from app.routes import authRoute, userRoutes, carbonfootprintRoute
     app.register_blueprint(authRoute.bp)
     app.register_blueprint(userRoutes.bp)
+    app.register_blueprint(carbonfootprintRoute.bp)
 
     with app.app_context():
         db.create_all()
