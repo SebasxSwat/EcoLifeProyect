@@ -20,16 +20,15 @@ def register():
     phone = data["phone"]
     username = data['username']
     email = data['email']
-    password = data['password']
-    
+    password = data['password'] 
+
     if User.query.filter_by(username=username).first():
         return jsonify({"message": "El nombre de usuario ya está registrado"}), 400
     
     if User.query.filter_by(email=email).first():
         return jsonify({"message": "El correo electrónico ya está registrado"}), 400
     
-    hashed_password = generate_password_hash(password)
-    user = User(username=username, email=email, password=hashed_password, name=name, lastname=lastname, phone=phone)
+    user = User(username=username, email=email, password=password, name=name, lastname=lastname, phone=phone)
     db.session.add(user)
     db.session.commit()
 
@@ -47,7 +46,7 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
-    if not user or not check_password_hash(user.password, password):
+    if not user or user.password != password:  # Comparación de la contraseña sin hash
         return jsonify({"message": "Credenciales incorrectas"}), 401
 
     token = jwt.encode({
@@ -60,8 +59,14 @@ def login():
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
     }, 'fabian_es_gay', algorithm='HS256')
 
+    first_login = user.first_login
+    if first_login:
+        user.first_login = False
+        db.session.commit()
+
     return jsonify({
         'access_token': token,
+        'first_login': first_login,
         'message': 'Inicio de sesión exitoso'
     }), 200
 
@@ -80,8 +85,6 @@ def request_password_reset():
         user.set_password_reset_token(token, expiry)
         db.session.commit()
 
-        # Aquí deberías enviar un correo electrónico al usuario con el enlace de restablecimiento
-        # Por ahora, solo simularemos el envío imprimiendo el token
         print(f"Token de restablecimiento para {email}: {token}")
 
         return jsonify({"message": "Si el correo existe, se ha enviado un enlace de restablecimiento"}), 200
@@ -98,6 +101,7 @@ def reset_password():
         return jsonify({"message": "Se requieren el token y la nueva contraseña"}), 400
 
     user = User.query.filter_by(reset_token=token).first()
+
     if user and user.check_password_reset_token(token):
         hashed_password = generate_password_hash(new_password)
         user.password = hashed_password
