@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-import datetime
 
 db = SQLAlchemy()
 
@@ -21,10 +20,13 @@ def create_app():
 
     jwt = JWTManager(app)
 
-    from app.routes import authRoute, userRoutes, carbonfootprintRoute
+    from app.routes import authRoute, userRoutes, carbonfootprintRoute, challengeRoute, completechallengeRoute
+
     app.register_blueprint(authRoute.bp)
     app.register_blueprint(userRoutes.bp)
     app.register_blueprint(carbonfootprintRoute.bp)
+    app.register_blueprint(challengeRoute.bp)
+    app.register_blueprint(completechallengeRoute.bp)
 
     with app.app_context():
         db.create_all()
