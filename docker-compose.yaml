@@ -1,13 +1,13 @@
 version: '3.8'
 services:
   db:
-    image: mariadb
+    image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: ecolife
       MYSQL_USER: admin
       MYSQL_PASSWORD: 1234
     volumes:
-      - ./data:/var/lib/mysql
+    - ./data/db:/var/lib/mysql
     ports:
       - 3306:3306
