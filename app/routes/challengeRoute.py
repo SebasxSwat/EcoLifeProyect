@@ -90,6 +90,13 @@ sample_challenges = [
         "points": 125,
         "carbon_reduction": 1.028,
         "challenge_type": "Energy"
+    },
+    {
+        "name": "Menos agua",
+        "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
+        "points": 125,
+        "carbon_reduction": 0.145,
+        "challenge_type": "Watter"
     }
 ]
 
