@@ -36,6 +36,7 @@ def register():
 
 @bp.route('/login', methods=['POST'])
 def login():
+
     data = request.get_json()
 
     if not all(key in data for key in ('username', 'password')):
@@ -46,7 +47,7 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
-    if not user or user.password != password:  # Comparación de la contraseña sin hash
+    if not user or user.password != password:  
         return jsonify({"message": "Credenciales incorrectas"}), 401
 
     token = jwt.encode({
@@ -57,7 +58,7 @@ def login():
         'name': user.name,
         'lastname': user.lastname,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
-    }, 'fabian_es_gay', algorithm='HS256')
+    }, 'ecolifepassword', algorithm='HS256')
 
     first_login = user.first_login
     if first_login:
