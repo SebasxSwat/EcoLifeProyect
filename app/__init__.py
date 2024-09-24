@@ -2,8 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
 db = SQLAlchemy()
+mail = Mail()
 
 def create_app():
     app = Flask(__name__)
@@ -11,6 +13,7 @@ def create_app():
     app.config.from_object('config.Config')
 
     db.init_app(app)
+    mail.init_app(app)
 
     CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 

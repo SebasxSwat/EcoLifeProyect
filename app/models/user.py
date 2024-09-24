@@ -17,7 +17,6 @@ class User(db.Model):
     reset_token = db.Column(db.String(100), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
 
-    carbon_footprint = db.relationship('CarbonFootprint', back_populates='user', uselist=False)
     completed_challenges = db.relationship('CompletedChallenge', back_populates='user')
     badges = db.relationship('Badge', back_populates='user')        
 
