@@ -21,6 +21,31 @@ def create_challenge():
 
     return jsonify(new_challenge.to_json()), 201
 
+@bp.route('/complete', methods=['POST'])
+def complete_challenge():
+    data = request.get_json()
+    challenge_id = data.get('challenge_id')
+
+    if not challenge_id:
+        return jsonify({"error": "El ID del desafío es obligatorio"}), 400
+
+    challenge = Challenge.query.get_or_404(challenge_id)
+
+    total_points = challenge.points
+    total_carbon_reduction = challenge.carbon_reduction
+
+    response = {
+        "message": "Desafío completado exitosamente",
+        "challenge": {
+            "id": challenge.id,
+            "name": challenge.name,
+            "points": total_points,
+            "carbon_reduction": total_carbon_reduction
+        }
+    }
+
+    return jsonify(response), 200
+
 @bp.route('/all', methods=['GET'])
 def get_all_challenges():
 
@@ -60,42 +85,42 @@ sample_challenges = [
         "name": "Lunes sin carne",
         "description": "Hazte vegetariano durante un día completo para reducir tu huella de carbono.",
         "points": 50,
-        "carbon_reduction": 0.251,
+        "carbon_reduction": 0.096,
         "challenge_type": "Diet"
     },
     {
-        "name": "En bici al trabajo",
-        "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de un auto o moto.",
+        "name": "Dia de Bici",
+        "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de una moto o auto.",
         "points": 75,
-        "carbon_reduction": 0.953,
+        "carbon_reduction": 0.107,
         "challenge_type": "Transportation"
     },
     {
         "name": "Dia cero residuos",
         "description": "Intenta no producir residuos durante todo un día.",
         "points": 100,
-        "carbon_reduction": 0.854,
+        "carbon_reduction": 0.116,
         "challenge_type": "Lifestyle"
     },
     {
         "name": "Planta un arbol",
         "description": "Planta un arbol en tu comunidad.",
         "points": 150,
-        "carbon_reduction": 0.999,
+        "carbon_reduction": 0.128,
         "challenge_type": "Nature"
     },
     {
         "name": "Menos energia",
         "description": "Carga tus dispositivos electronicos una vez al dia.",
         "points": 125,
-        "carbon_reduction": 1.028,
+        "carbon_reduction": 1.115,
         "challenge_type": "Energy"
     },
     {
         "name": "Menos agua",
         "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
         "points": 125,
-        "carbon_reduction": 0.145,
+        "carbon_reduction": 0.112,
         "challenge_type": "Watter"
     }
 ]
