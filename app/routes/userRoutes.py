@@ -15,7 +15,8 @@ def get_user(id):
         "lastname": user.lastname,
         "username": user.username,
         "email": user.email,
-        "phone": user.phone
+        "phone": user.phone,
+        "eco_score": user.eco_score
     }), 200
 
 @bp.route('/user/<int:id>', methods=['PUT'])
