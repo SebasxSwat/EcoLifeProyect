@@ -1,6 +1,8 @@
 
 from app import db
-from datetime import datetime
+from datetime import datetime, timedelta
+import secrets
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -33,9 +35,9 @@ class User(db.Model):
             "eco_score": self.eco_score,
         }
 
-    def set_password_reset_token(self, token, expiry):
-        self.reset_token = token
-        self.reset_token_expiry = expiry
+    def set_password_reset_token(self):
+        self.reset_token = secrets.token_urlsafe(32)
+        self.reset_token_expiry = datetime.utcnow() + timedelta(hours=1)
 
     def check_password_reset_token(self, token):
         return self.reset_token == token and self.reset_token_expiry > datetime.utcnow()
