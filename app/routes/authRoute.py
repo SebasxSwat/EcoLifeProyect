@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, current_app, render_template_stri
 from app import db,mail
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.user import User
-from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
 import datetime
 import secrets
@@ -133,22 +132,37 @@ def reset_password():
     
     return jsonify({"message": "Token inválido o expirado"}), 400
 
-@bp.route('/user/<int:user_id>/update', methods=['PUT'])
-def update_password(user_id):
-    if request.method == 'OPTIONS':
-        return '', 200 
+@bp.route('/update-password', methods=['PUT'])
+def update_password():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"message": "Token faltante"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]  
+    except IndexError:
+        return jsonify({"message": "Formato del token incorrecto"}), 401
+
+    try:
+        decoded_token = jwt.decode(token, 'ecolifepassword', algorithms=['HS256'])
+        user_id = decoded_token.get('id') 
+
+        if not user_id:
+            return jsonify({"message": "Campo 'id' no encontrado en el token"}), 400
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "Token expirado"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Token inválido"}), 401
 
     data = request.get_json()
-    if not data:
-        return jsonify({"message": "Datos no proporcionados"}), 400
-
     current_password = data.get('current_password')
     new_password = data.get('new_password')
 
     if not current_password or not new_password:
         return jsonify({"message": "Se requieren la contraseña actual y la nueva"}), 400
 
-    user = User.query.get(user_id)
+    user = User.query.get(user_id) 
     if not user:
         return jsonify({"message": "Usuario no encontrado"}), 404
 

@@ -51,17 +51,17 @@ def complete_challenge():
     else:
         return jsonify({'error': 'No se encontró la huella de carbono para este usuario'}), 404
 
-    if challenge.challenge_type == 'Nature':
+    if challenge.challenge_type == 'TreeDeciduous':
         user.trees_planted += 1  
-    elif challenge.challenge_type == 'Water':
+    elif challenge.challenge_type == 'Droplet':
         user.water_saved += 32.6  
-    elif challenge.challenge_type == 'Lifestyle':
+    elif challenge.challenge_type == 'Trash2':
         user.waste_recycled += 1.5  
-    elif challenge.challenge_type == 'Irrigation':
+    elif challenge.challenge_type == 'Flower2':
         user.water_saved += 1.7  
     elif challenge.challenge_type == 'Recycle':
         user.waste_recycled += 0.7  
-    elif challenge.challenge_type == 'Showers':
+    elif challenge.challenge_type == 'ShowerHead':
         user.waste_recycled += 8.7  
 
 
@@ -122,13 +122,6 @@ def delete_challenge(id):
 
 sample_challenges = [
     {
-        "name": "Dia sin carne",
-        "description": "Hazte vegetariano durante un día completo para reducir tu huella de carbono.",
-        "points": 50,
-        "carbon_reduction": 0.086,
-        "challenge_type": "Diet"
-    },
-    {
         "name": "Dia de Bici",
         "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de una moto o auto.",
         "points": 75,
@@ -139,29 +132,50 @@ sample_challenges = [
         "name": "Dia cero residuos",
         "description": "Intenta no producir residuos durante todo un día.",
         "points": 100,
-        "carbon_reduction": 0.106,
+        "carbon_reduction": 0.096,
         "challenge_type": "Lifestyle"
     },
     {
         "name": "Planta un arbol",
         "description": "Planta un arbol en tu comunidad.",
         "points": 150,
-        "carbon_reduction": 0.109,
+        "carbon_reduction": 0.082,
         "challenge_type": "Nature"
     },
     {
         "name": "Menos energia",
         "description": "Carga tus dispositivos electronicos una vez al dia.",
         "points": 125,
-        "carbon_reduction": 1.110,
+        "carbon_reduction": 0.045,
         "challenge_type": "Energy"
     },
     {
         "name": "Menos agua",
         "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
         "points": 125,
-        "carbon_reduction": 0.112,
+        "carbon_reduction": 0.045,
         "challenge_type": "Water"
+    },
+    {
+        "name": "Riego eficiente",
+        "description": "Riega tus plantas en las primeras horas de la mañana o al atardecer para evitar la evaporación.",
+        "points": 110,
+        "carbon_reduction": 0.016,
+        "challenge_type": "Irrigation"
+    },
+    {
+        "name": "Duchas cortas",
+        "description": "Reduce el tiempo de tus duchas a 5 minutos o menos.",
+        "points": 125,
+        "carbon_reduction": 0.026,
+        "challenge_type": "Showers"
+    },
+    {
+        "name": "Reciclaje de papel",
+        "description": "Recicla papel y cartón en lugar de tirarlo a la basura.",
+        "points": 90,
+        "carbon_reduction": 0.097,
+        "challenge_type": "Recycle"
     }
 ]
 

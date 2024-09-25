@@ -17,11 +17,11 @@ class User(db.Model):
     trees_planted = db.Column(db.Integer, default=0)
     water_saved = db.Column(db.Float, default=0.0)  
     waste_recycled = db.Column(db.Float, default=0.0)  
-    
     reset_token = db.Column(db.String(100), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
-
-    badges = db.relationship('Badge', back_populates='user')        
+    
+    badges = db.relationship('Badge', back_populates='user')    
+    activities = db.relationship('Activity', back_populates='user')    
 
     def to_json(self):
         return {
