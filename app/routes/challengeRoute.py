@@ -51,12 +51,19 @@ def complete_challenge():
     else:
         return jsonify({'error': 'No se encontró la huella de carbono para este usuario'}), 404
 
-    if challenge.challenge_type == 'nature' and challenge.level == 'plata':
-        user.trees_planted += 1  # Incrementar el número de árboles plantados
-    elif challenge.challenge_type == 'water':
-        user.water_saved += 47.3  # Incrementar el agua ahorrada, ajustar el valor según corresponda
-    elif challenge.challenge_type == 'lifestyle':
-        user.waste_recycled += 1.8  # Incrementar los residuos reciclados, ajustar el valor según corresponda
+    if challenge.challenge_type == 'Nature':
+        user.trees_planted += 1  
+    elif challenge.challenge_type == 'Water':
+        user.water_saved += 32.6  
+    elif challenge.challenge_type == 'Lifestyle':
+        user.waste_recycled += 1.5  
+    elif challenge.challenge_type == 'Irrigation':
+        user.water_saved += 1.7  
+    elif challenge.challenge_type == 'Recycle':
+        user.waste_recycled += 0.7  
+    elif challenge.challenge_type == 'Showers':
+        user.waste_recycled += 8.7  
+
 
     db.session.add(new_completed)
     db.session.commit()
@@ -77,13 +84,10 @@ def get_all_challenges():
 
     user = User.query.get_or_404(user_id)
     
-    # Obtener los IDs de los desafíos completados por el usuario
     completed_challenge_ids = [c.challenge_id for c in user.completed_challenges]
     
-    # Obtener los desafíos que el usuario no ha completado
     available_challenges = Challenge.query.filter(~Challenge.id.in_(completed_challenge_ids)).all()
 
-    # Devuelve solo los desafíos que no han sido completados por el usuario
     return jsonify([challenge.to_json() for challenge in available_challenges]), 200
 
 
@@ -157,7 +161,7 @@ sample_challenges = [
         "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
         "points": 125,
         "carbon_reduction": 0.112,
-        "challenge_type": "Watter"
+        "challenge_type": "Water"
     }
 ]
 

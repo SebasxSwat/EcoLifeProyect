@@ -14,8 +14,6 @@ class User(db.Model):
     password = db.Column(db.String(128))
     first_login = db.Column(db.Boolean, default=True)
     eco_score = db.Column(db.Integer, default=0)
-    
-    # Nuevos atributos
     trees_planted = db.Column(db.Integer, default=0)
     water_saved = db.Column(db.Float, default=0.0)  
     waste_recycled = db.Column(db.Float, default=0.0)  
