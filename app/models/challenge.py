@@ -10,8 +10,6 @@ class Challenge(db.Model):
     carbon_reduction = db.Column(db.Float, nullable=False)
     challenge_type = db.Column(db.String(50)) 
 
-    completed_challenges = db.relationship('CompletedChallenge', back_populates='challenge')
-
     def to_json(self):
         return{
             "id": self.id,

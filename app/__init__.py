@@ -26,13 +26,12 @@ def create_app():
 
     jwt = JWTManager(app)
 
-    from app.routes import authRoute, userRoutes, carbonfootprintRoute, challengeRoute, completechallengeRoute
+    from app.routes import authRoute, userRoutes, carbonfootprintRoute, challengeRoute
 
     app.register_blueprint(authRoute.bp)
     app.register_blueprint(userRoutes.bp)
     app.register_blueprint(carbonfootprintRoute.bp)
     app.register_blueprint(challengeRoute.bp)
-    app.register_blueprint(completechallengeRoute.bp)
 
     with app.app_context():
         db.create_all()

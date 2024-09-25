@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify
 from app import db
 from app.models.challenge import Challenge
+from app.models.user import User
+from app.models.carbonfootprint import CarbonFootprint
+from app.models.completechallenge import CompletedChallenge
 
 bp = Blueprint('challenges', __name__, url_prefix='/challenges')
 
@@ -21,11 +24,57 @@ def create_challenge():
 
     return jsonify(new_challenge.to_json()), 201
 
+@bp.route('/complete', methods=['POST'])
+def complete_challenge():
+    data = request.get_json()
+
+    challenge_id = data.get('challenge_id')
+    user_id = data.get('user_id')
+
+    if not challenge_id or not user_id:
+        return jsonify({'error': 'El ID del desafío y el ID del usuario son obligatorios'}), 400
+
+    user = User.query.get_or_404(user_id)
+    challenge = Challenge.query.get_or_404(challenge_id)
+
+    completed = CompletedChallenge.query.filter_by(user_id=user_id, challenge_id=challenge_id).first()
+    if completed:
+        return jsonify({'error': 'Este desafío ya ha sido completado'}), 400
+
+    new_completed = CompletedChallenge(user_id=user_id, challenge_id=challenge_id)
+    user.eco_score += challenge.points
+
+    carbon_footprint = CarbonFootprint.query.filter_by(user_id=user_id).first()
+    if carbon_footprint:
+        carbon_footprint.value -= challenge.carbon_reduction
+    else:
+        return jsonify({'error': 'No se encontró la huella de carbono para este usuario'}), 404
+
+    db.session.add(new_completed)
+    db.session.commit()
+
+    return jsonify({"message": "Desafío completado exitosamente"}), 200
+
+
+
 @bp.route('/all', methods=['GET'])
 def get_all_challenges():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Se requiere el ID del usuario"}), 400
 
-    challenges = Challenge.query.all()
-    return jsonify([challenge.to_json() for challenge in challenges]), 200
+    user = User.query.get_or_404(user_id)
+    
+    # Obtener los IDs de los desafíos completados por el usuario
+    completed_challenge_ids = [c.challenge_id for c in user.completed_challenges]
+    
+    # Obtener los desafíos que el usuario no ha completado
+    available_challenges = Challenge.query.filter(~Challenge.id.in_(completed_challenge_ids)).all()
+
+    # Devuelve solo los desafíos que no han sido completados por el usuario
+    return jsonify([challenge.to_json() for challenge in available_challenges]), 200
+
+
 
 @bp.route('/get-one/<int:id>', methods=['GET'])
 def get_challenge(id):
@@ -57,45 +106,45 @@ def delete_challenge(id):
 
 sample_challenges = [
     {
-        "name": "Lunes sin carne",
+        "name": "Dia sin carne",
         "description": "Hazte vegetariano durante un día completo para reducir tu huella de carbono.",
         "points": 50,
-        "carbon_reduction": 0.251,
+        "carbon_reduction": 0.096,
         "challenge_type": "Diet"
     },
     {
-        "name": "En bici al trabajo",
-        "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de un auto o moto.",
+        "name": "Dia de Bici",
+        "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de una moto o auto.",
         "points": 75,
-        "carbon_reduction": 0.953,
+        "carbon_reduction": 0.107,
         "challenge_type": "Transportation"
     },
     {
         "name": "Dia cero residuos",
         "description": "Intenta no producir residuos durante todo un día.",
         "points": 100,
-        "carbon_reduction": 0.854,
+        "carbon_reduction": 0.116,
         "challenge_type": "Lifestyle"
     },
     {
         "name": "Planta un arbol",
         "description": "Planta un arbol en tu comunidad.",
         "points": 150,
-        "carbon_reduction": 0.999,
+        "carbon_reduction": 0.128,
         "challenge_type": "Nature"
     },
     {
         "name": "Menos energia",
         "description": "Carga tus dispositivos electronicos una vez al dia.",
         "points": 125,
-        "carbon_reduction": 1.028,
+        "carbon_reduction": 1.115,
         "challenge_type": "Energy"
     },
     {
         "name": "Menos agua",
         "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
         "points": 125,
-        "carbon_reduction": 0.145,
+        "carbon_reduction": 0.112,
         "challenge_type": "Watter"
     }
 ]
@@ -110,3 +159,20 @@ def init_challenges():
     return jsonify({"message": "Sample challenges initialized successfully"}), 201
 
 
+@bp.route('/user/<int:user_id>', methods=['GET'])
+def get_user_challenges(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    completed_challenges = db.session.query(Challenge).join(CompletedChallenge).filter(
+        CompletedChallenge.user_id == user_id
+    ).all()
+
+    completed_challenge_ids = [challenge.id for challenge in completed_challenges]
+    available_challenges = Challenge.query.filter(
+        ~Challenge.id.in_(completed_challenge_ids)
+    ).all()
+
+    return jsonify({
+        'completed_challenges': [challenge.to_json() for challenge in completed_challenges],
+        'available_challenges': [challenge.to_json() for challenge in available_challenges]
+    }), 200
