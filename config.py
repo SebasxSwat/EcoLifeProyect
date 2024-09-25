@@ -8,11 +8,18 @@ class Config:
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = '1097664747f@gmail.com'  # Reemplaza con tu correo real
-    MAIL_PASSWORD = 'bgxn kibx bujc sjaw'  # Reemplaza con tu contraseña de aplicación real
+    MAIL_USERNAME = 'resetecolife@gmail.com' 
+    MAIL_PASSWORD = 'akgu mndo peif aguy' 
     MAIL_DEFAULT_SENDER = '1097664747f@gmail.com'
 
-    # Configuración JWT existente
+    
     JWT_SECRET_KEY = 'ecolifepassword'
     JWT_ALGORITHM = 'HS256'
 
+
+
+
+
+
+#MAIL_USERNAME = '1097664747f@gmail.com'  
+#MAIL_PASSWORD = 'bgxn kibx bujc sjaw'  
