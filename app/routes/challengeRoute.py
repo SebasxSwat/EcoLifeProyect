@@ -42,6 +42,7 @@ def complete_challenge():
         return jsonify({'error': 'Este desafío ya ha sido completado'}), 400
 
     new_completed = CompletedChallenge(user_id=user_id, challenge_id=challenge_id)
+
     user.eco_score += challenge.points
 
     carbon_footprint = CarbonFootprint.query.filter_by(user_id=user_id).first()
@@ -50,12 +51,23 @@ def complete_challenge():
     else:
         return jsonify({'error': 'No se encontró la huella de carbono para este usuario'}), 404
 
+    if challenge.challenge_type == 'nature' and challenge.level == 'plata':
+        user.trees_planted += 1  # Incrementar el número de árboles plantados
+    elif challenge.challenge_type == 'water':
+        user.water_saved += 47.3  # Incrementar el agua ahorrada, ajustar el valor según corresponda
+    elif challenge.challenge_type == 'lifestyle':
+        user.waste_recycled += 1.8  # Incrementar los residuos reciclados, ajustar el valor según corresponda
+
     db.session.add(new_completed)
     db.session.commit()
 
-    return jsonify({"message": "Desafío completado exitosamente"}), 200
-
-
+    return jsonify({
+        "message": "Desafío completado exitosamente",
+        "eco_score": user.eco_score,
+        "trees_planted": user.trees_planted,
+        "water_saved": user.water_saved,
+        "waste_recycled": user.waste_recycled
+    }), 200
 
 @bp.route('/all', methods=['GET'])
 def get_all_challenges():
@@ -109,35 +121,35 @@ sample_challenges = [
         "name": "Dia sin carne",
         "description": "Hazte vegetariano durante un día completo para reducir tu huella de carbono.",
         "points": 50,
-        "carbon_reduction": 0.096,
+        "carbon_reduction": 0.086,
         "challenge_type": "Diet"
     },
     {
         "name": "Dia de Bici",
         "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de una moto o auto.",
         "points": 75,
-        "carbon_reduction": 0.107,
+        "carbon_reduction": 0.097,
         "challenge_type": "Transportation"
     },
     {
         "name": "Dia cero residuos",
         "description": "Intenta no producir residuos durante todo un día.",
         "points": 100,
-        "carbon_reduction": 0.116,
+        "carbon_reduction": 0.106,
         "challenge_type": "Lifestyle"
     },
     {
         "name": "Planta un arbol",
         "description": "Planta un arbol en tu comunidad.",
         "points": 150,
-        "carbon_reduction": 0.128,
+        "carbon_reduction": 0.109,
         "challenge_type": "Nature"
     },
     {
         "name": "Menos energia",
         "description": "Carga tus dispositivos electronicos una vez al dia.",
         "points": 125,
-        "carbon_reduction": 1.115,
+        "carbon_reduction": 1.110,
         "challenge_type": "Energy"
     },
     {
