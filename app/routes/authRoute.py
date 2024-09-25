@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app, render_template_string
 from app import db,mail
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.user import User
 from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
@@ -8,6 +9,8 @@ import secrets
 from datetime import datetime
 from datetime import timedelta
 from flask_mail import Message
+from flask_cors import cross_origin
+
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -88,7 +91,7 @@ def request_password_reset():
         user.set_password_reset_token()
         db.session.commit()
 
-        reset_url = f"http://localhost:3000/restablecer-contrasena?token={user.reset_token}"
+        reset_url = f"http://localhost:3000/#/restablecer-contrasena?token={user.reset_token}"
         
         html = render_template_string("""
         <h1>Recuperación de Contraseña EcoLife</h1>
@@ -129,3 +132,30 @@ def reset_password():
         return jsonify({"message": "Contraseña restablecida con éxito"}), 200
     
     return jsonify({"message": "Token inválido o expirado"}), 400
+
+@bp.route('/user/<int:user_id>/update', methods=['PUT'])
+def update_password(user_id):
+    if request.method == 'OPTIONS':
+        return '', 200 
+
+    data = request.get_json()
+    if not data:
+        return jsonify({"message": "Datos no proporcionados"}), 400
+
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+
+    if not current_password or not new_password:
+        return jsonify({"message": "Se requieren la contraseña actual y la nueva"}), 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    if user.password != current_password:
+        return jsonify({"message": "Contraseña actual incorrecta"}), 400
+
+    user.password = new_password
+    db.session.commit()
+
+    return jsonify({"message": "Contraseña actualizada con éxito"}), 200
