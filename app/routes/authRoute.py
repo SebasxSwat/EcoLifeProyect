@@ -1,12 +1,14 @@
-from flask import Blueprint, request, jsonify, current_app
-from app import db
+from flask import Blueprint, request, jsonify, current_app, render_template_string
+from app import db,mail
 from app.models.user import User
 from werkzeug.security import check_password_hash, generate_password_hash
 import jwt
 import datetime
 import secrets
+from datetime import datetime
+from datetime import timedelta
 from flask_mail import Message
-from app import db, mail
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -59,7 +61,7 @@ def login():
         'phone': user.phone,
         'name': user.name,
         'lastname': user.lastname,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2)
+        'exp': datetime.utcnow() + timedelta(hours=2)
     }, 'ecolifepassword', algorithm='HS256')
 
     first_login = user.first_login
@@ -83,37 +85,29 @@ def request_password_reset():
 
     user = User.query.filter_by(email=email).first()
     if user:
-        token = secrets.token_urlsafe(32)
-        expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        user.reset_token = token
-        user.reset_token_expiry = expiry
+        user.set_password_reset_token()
         db.session.commit()
 
-        reset_url = f"http://localhost:3000/restablecer-contrasena?token={token}"
+        reset_url = f"http://localhost:3000/restablecer-contrasena?token={user.reset_token}"
         
-        try:
-            msg = Message("Recuperación de Contraseña EcoLife",
-                          recipients=[email])
-            msg.body = f"""
-            Hola,
+        html = render_template_string("""
+        <h1>Recuperación de Contraseña EcoLife</h1>
+        <p>Hola,</p>
+        <p>Has solicitado restablecer tu contraseña en EcoLife. 
+        Por favor, haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+        <p><a href="{{ reset_url }}">Restablecer Contraseña</a></p>
+        <p>Este enlace expirará en 1 hora.</p>
+        <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+        <p>Saludos,<br>El equipo de EcoLife</p>
+        """, reset_url=reset_url)
 
-            Has solicitado restablecer tu contraseña en EcoLife. 
-            Por favor, haz clic en el siguiente enlace para restablecer tu contraseña:
+        msg = Message("Recuperación de Contraseña EcoLife",
+                      sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                      recipients=[email],
+                      html=html)
+        mail.send(msg)
 
-            {reset_url}
-
-            Este enlace expirará en 1 hora.
-
-            Si no solicitaste este cambio, puedes ignorar este correo.
-
-            Saludos,
-            El equipo de EcoLife
-            """
-            mail.send(msg)
-            current_app.logger.info(f"Correo de restablecimiento enviado a {email}")
-        except Exception as e:
-            current_app.logger.error(f"Error al enviar el correo: {str(e)}")
-            return jsonify({"message": "Error al enviar el correo de restablecimiento"}), 500
+        current_app.logger.info(f"Correo de restablecimiento enviado a {email}")
 
     return jsonify({"message": "Si el correo existe, se ha enviado un enlace de restablecimiento"}), 200
 
@@ -126,25 +120,12 @@ def reset_password():
     if not token or not new_password:
         return jsonify({"message": "Se requieren el token y la nueva contraseña"}), 400
 
-    user = User.query.filter_by(reset_token=token).first()
-    if user and user.reset_token_expiry > datetime.datetime.utcnow():
-        user.password = generate_password_hash(new_password)
+    user = User.query.filter(User.reset_token == token).first()
+    if user and user.check_password_reset_token(token):
+        user.password = (new_password)
         user.reset_token = None
         user.reset_token_expiry = None
         db.session.commit()
         return jsonify({"message": "Contraseña restablecida con éxito"}), 200
     
     return jsonify({"message": "Token inválido o expirado"}), 400
-
-@bp.route('/test-email', methods=['GET'])
-def test_email():
-    try:
-        msg = Message("Test Email",
-                      recipients=[current_app.config['MAIL_USERNAME']])
-        msg.body = "Este es un correo de prueba desde EcoLife."
-        mail.send(msg)
-        current_app.logger.info("Correo de prueba enviado con éxito")
-        return jsonify({"message": "Correo de prueba enviado con éxito"}), 200
-    except Exception as e:
-        current_app.logger.error(f"Error al enviar el correo de prueba: {str(e)}")
-        return jsonify({"message": f"Error al enviar el correo de prueba: {str(e)}"}), 500
