@@ -54,7 +54,7 @@ def complete_challenge():
     if challenge.challenge_type == 'TreeDeciduous':
         user.trees_planted += 1  
     elif challenge.challenge_type == 'Droplet':
-        user.water_saved += 32.6  
+        user.water_saved += 12.4  
     elif challenge.challenge_type == 'Trash2':
         user.waste_recycled += 1.5  
     elif challenge.challenge_type == 'Flower2':
@@ -126,49 +126,49 @@ sample_challenges = [
         "description": "Utilice una bicicleta para sus desplazamientos diarios en lugar de una moto o auto.",
         "points": 75,
         "carbon_reduction": 0.097,
-        "challenge_type": "Transportation"
+        "challenge_type": "Bike"
     },
     {
         "name": "Dia cero residuos",
         "description": "Intenta no producir residuos durante todo un día.",
         "points": 100,
         "carbon_reduction": 0.096,
-        "challenge_type": "Lifestyle"
+        "challenge_type": "Trash2"
     },
     {
         "name": "Planta un arbol",
         "description": "Planta un arbol en tu comunidad.",
         "points": 150,
         "carbon_reduction": 0.082,
-        "challenge_type": "Nature"
+        "challenge_type": "TreeDeciduous"
     },
     {
         "name": "Menos energia",
         "description": "Carga tus dispositivos electronicos una vez al dia.",
         "points": 125,
         "carbon_reduction": 0.045,
-        "challenge_type": "Energy"
+        "challenge_type": "Zap"
     },
     {
         "name": "Menos agua",
         "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
         "points": 125,
         "carbon_reduction": 0.045,
-        "challenge_type": "Water"
+        "challenge_type": "Droplet"
     },
     {
         "name": "Riego eficiente",
         "description": "Riega tus plantas en las primeras horas de la mañana o al atardecer para evitar la evaporación.",
         "points": 110,
         "carbon_reduction": 0.016,
-        "challenge_type": "Irrigation"
+        "challenge_type": "Flower2"
     },
     {
         "name": "Duchas cortas",
         "description": "Reduce el tiempo de tus duchas a 5 minutos o menos.",
         "points": 125,
         "carbon_reduction": 0.026,
-        "challenge_type": "Showers"
+        "challenge_type": "ShowerHead"
     },
     {
         "name": "Reciclaje de papel",

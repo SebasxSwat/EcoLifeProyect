@@ -13,8 +13,12 @@ class Activity(db.Model):
     user = db.relationship('User', back_populates='activities')
     challenge = db.relationship('Challenge', back_populates='activities')
 
-    def to_json (self):
+    def to_json(self):
         return {
-            "id": self.id,
-            "date_completed": self.date_completed
+            'id': self.id,
+            'challenge_id': self.challenge_id,
+            'challenge': {
+                'points': self.challenge.points  
+            },
+            'date_completed': self.date_completed
         }

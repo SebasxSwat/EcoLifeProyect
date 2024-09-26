@@ -40,7 +40,8 @@ def create_activity():
         return jsonify({"message": "Desafío no encontrado"}), 404
 
     user = User.query.get(user_id)
-    eco_score = user.eco_score
+    if not user:
+        return jsonify({"message": "Usuario no encontrado"}), 404
 
     activity = Activity(
         user_id=user_id,
@@ -48,16 +49,19 @@ def create_activity():
         date_completed=datetime.utcnow()  
     )
 
-    db.session.add(activity)
+    try:
+        db.session.add(activity)
+        
+        db.session.commit()
 
-    user = User.query.get(user_id)
-    user.eco_score += challenge.points
-    
-    db.session.commit()
+        return jsonify({"message": "Actividad creada y eco score actualizado", "eco_score": user.eco_score}), 201
+    except Exception as e:
+        db.session.rollback()  
+        return jsonify({"message": f"Error al crear la actividad: {str(e)}"}), 500
 
-    return jsonify({"message": "Actividad creada y eco score actualizado", "eco_score": user.eco_score}), 201
 
 @bp.route('/all/<int:user_id>', methods=['GET'])
 def get_activities(user_id):
-    activities = Activity.query.filter_by(user_id=user_id).all()
+    activities = Activity.query.filter_by(user_id=user_id).join(Challenge).all()
     return jsonify([activity.to_json() for activity in activities])
+
