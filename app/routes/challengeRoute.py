@@ -4,8 +4,27 @@ from app.models.challenge import Challenge
 from app.models.user import User
 from app.models.carbonfootprint import CarbonFootprint
 from app.models.completechallenge import CompletedChallenge
+from app.models.badge import Badge
+from app.models.userbadge import UserBadge
 
 bp = Blueprint('challenges', __name__, url_prefix='/challenges')
+
+def check_and_assign_badges(user):
+    badges = Badge.query.all()
+    
+    for badge in badges:
+        if (user.eco_score >= badge.eco_points_required and
+            user.trees_planted >= badge.trees_planted_required and
+            user.water_saved >= badge.water_saved_required and
+            user.waste_recycled >= badge.waste_recycled_required):
+            
+            existing_user_badge = UserBadge.query.filter_by(user_id=user.id, badge_id=badge.id).first()
+            if not existing_user_badge:
+                new_user_badge = UserBadge(user_id=user.id, badge_id=badge.id)
+                db.session.add(new_user_badge)
+    
+    db.session.commit()
+
 
 @bp.route('/create', methods=['POST'])
 def create_challenge():
@@ -54,7 +73,7 @@ def complete_challenge():
     if challenge.challenge_type == 'TreeDeciduous':
         user.trees_planted += 1  
     elif challenge.challenge_type == 'Droplet':
-        user.water_saved += 12.4  
+        user.water_saved += 17.4  
     elif challenge.challenge_type == 'Trash2':
         user.waste_recycled += 1.5  
     elif challenge.challenge_type == 'Flower2':
@@ -64,9 +83,10 @@ def complete_challenge():
     elif challenge.challenge_type == 'ShowerHead':
         user.waste_recycled += 8.7  
 
-
     db.session.add(new_completed)
     db.session.commit()
+
+    check_and_assign_badges(user)
 
     return jsonify({
         "message": "Desafío completado exitosamente",
@@ -75,6 +95,7 @@ def complete_challenge():
         "water_saved": user.water_saved,
         "waste_recycled": user.waste_recycled
     }), 200
+
 
 @bp.route('/all', methods=['GET'])
 def get_all_challenges():
@@ -151,7 +172,7 @@ sample_challenges = [
     },
     {
         "name": "Menos agua",
-        "description": "Minetras te cepillas y enjabonas en la duhca, manten la llave cerrada.",
+        "description": "Mientras te cepillas y enjabonas en la ducha, manten la llave cerrada.",
         "points": 125,
         "carbon_reduction": 0.045,
         "challenge_type": "Droplet"

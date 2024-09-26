@@ -21,7 +21,7 @@ class User(db.Model):
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
     role = db.Column(db.String(50), default='user')
     
-    badges = db.relationship('Badge', back_populates='user')    
+    user_badges = db.relationship('UserBadge', back_populates='user')    
     activities = db.relationship('Activity', back_populates='user')    
 
     def to_json(self):
