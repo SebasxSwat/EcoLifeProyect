@@ -51,10 +51,19 @@ def login():
     username = data['username']
     password = data['password']
 
+    # Lista de administradores por username o correo
+    admins = ['fabianmc', 'fabiannmarinn1@gmail.com']
+
     user = User.query.filter_by(username=username).first()
 
     if not user or user.password != password:  
         return jsonify({"message": "Credenciales incorrectas"}), 401
+    
+    # Asignar automáticamente el rol de admin si el usuario está en la lista
+    if user.username in admins:
+        user.role = 'admin'
+    else:
+        user.role = 'user'
 
     token = jwt.encode({
         'id': user.id,
@@ -63,6 +72,7 @@ def login():
         'phone': user.phone,
         'name': user.name,
         'lastname': user.lastname,
+        'role': user.role,
         'exp': datetime.utcnow() + timedelta(hours=2)
     }, 'ecolifepassword', algorithm='HS256')
 
@@ -71,10 +81,17 @@ def login():
         user.first_login = False
         db.session.commit()
 
+    # Redirigir al dashboard correspondiente según el rol
+    if user.role == 'admin':
+        dashboard_url = '/dashboardAdmin'
+    else:
+        dashboard_url = '/dashboardUser'
+
     return jsonify({
         'access_token': token,
         'first_login': first_login,
-        'message': 'Inicio de sesión exitoso'
+        'message': 'Inicio de sesión exitoso',
+        'redirect_url': dashboard_url
     }), 200
 
 @bp.route('/request-password-reset', methods=['POST'])
