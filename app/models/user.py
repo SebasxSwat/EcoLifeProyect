@@ -19,6 +19,7 @@ class User(db.Model):
     waste_recycled = db.Column(db.Float, default=0.0)  
     reset_token = db.Column(db.String(100), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
+    role = db.Column(db.String(50), default='user')
     
     user_badges = db.relationship('UserBadge', back_populates='user')    
     activities = db.relationship('Activity', back_populates='user')    
