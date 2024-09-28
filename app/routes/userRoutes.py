@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models.user import User, db  
+import jwt
 
 bp = Blueprint('user', __name__)
 
@@ -46,3 +47,56 @@ def update_user(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+@bp.route('/avatar', methods=['PUT'])
+def assign_avatar():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"message": "Token faltante"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+    except IndexError:
+        return jsonify({"message": "Formato del token incorrecto"}), 401
+
+    try:
+        decoded_token = jwt.decode(token, 'ecolifepassword', algorithms=['HS256'])
+        user_id = decoded_token.get('id')
+
+        if not user_id:
+            return jsonify({"message": "Campo 'id' no encontrado en el token"}), 400
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "El token ha expirado"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Token inválido"}), 401
+
+    data = request.get_json()
+
+    avatar = data.get('avatar')
+    if not avatar:
+        return jsonify({"error": "No avatar provided"}), 400
+
+    allowed_avatars = [
+        "/avatars/tree.png",
+        "/avatars/leaf.png",
+        "/avatars/flower.png",
+        "/avatars/recycle.png",
+        "/avatars/water-drop.png",
+        "/avatars/sun.png",
+        "/avatars/planet.png",  
+        "/avatars/earth.png",   
+        "/avatars/butterfly.png" 
+    ]
+
+    if avatar not in allowed_avatars:
+        return jsonify({"error": "Invalid avatar selected"}), 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    user.avatar = avatar
+    db.session.commit()
+
+    return jsonify({"message": "Avatar updated successfully", "avatar": user.avatar}), 200

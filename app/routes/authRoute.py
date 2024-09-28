@@ -51,15 +51,13 @@ def login():
     username = data['username']
     password = data['password']
 
-    # Lista de administradores por username o correo
-    admins = ['fabianmc', 'sebasxswat', 'sebas@gmail.com' 'fabiannmarinn1@gmail.com']
+    admins = ['fabianmc', 'fabiannmarinn1@gmail.com']
 
     user = User.query.filter_by(username=username).first()
 
     if not user or user.password != password:  
         return jsonify({"message": "Credenciales incorrectas"}), 401
     
-    # Asignar automáticamente el rol de admin si el usuario está en la lista
     if user.username in admins:
         user.role = 'admin'
     else:
@@ -81,7 +79,6 @@ def login():
         user.first_login = False
         db.session.commit()
 
-    # Redirigir al dashboard correspondiente según el rol
     if user.role == 'admin':
         dashboard_url = '/dashboardAdmin'
     else:

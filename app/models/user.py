@@ -22,7 +22,7 @@ class User(db.Model):
     role = db.Column(db.String(50), default='user')
     
     user_badges = db.relationship('UserBadge', back_populates='user')    
-    activities = db.relationship('Activity', back_populates='user')    
+    activities = db.relationship('Activity', back_populates='user')  
 
     def to_json(self):
         return {
@@ -38,6 +38,7 @@ class User(db.Model):
             "trees_planted": self.trees_planted,
             "water_saved": self.water_saved,
             "waste_recycled": self.waste_recycled,
+            "role": self.role,
         }
 
     def set_password_reset_token(self):
