@@ -52,7 +52,7 @@ def login():
     password = data['password']
 
     # Lista de administradores por username o correo
-    admins = ['fabianmc', 'fabiannmarinn1@gmail.com']
+    admins = ['fabianmc', 'sebasxswat', 'sebas@gmail.com' 'fabiannmarinn1@gmail.com']
 
 
     user = User.query.filter_by(username=username).first()

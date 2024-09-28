@@ -73,13 +73,13 @@ def complete_challenge():
     if challenge.challenge_type == 'TreeDeciduous':
         user.trees_planted += 1  
     elif challenge.challenge_type == 'Droplet':
-        user.water_saved += 17.4  
+        user.water_saved += 19.4  
     elif challenge.challenge_type == 'Trash2':
         user.waste_recycled += 1.5  
     elif challenge.challenge_type == 'Flower2':
         user.water_saved += 1.7  
     elif challenge.challenge_type == 'Recycle':
-        user.waste_recycled += 0.7  
+        user.waste_recycled += 1  
     elif challenge.challenge_type == 'ShowerHead':
         user.waste_recycled += 8.7  
 
@@ -196,6 +196,13 @@ sample_challenges = [
         "description": "Recicla papel y cartón en lugar de tirarlo a la basura.",
         "points": 90,
         "carbon_reduction": 0.097,
+        "challenge_type": "Recycle"
+    },
+    {
+        "name": "Recicla plásticos",
+        "description": "Separa y recicla al menos 1 kg de plástico.",
+        "points": 80,
+        "carbon_reduction": 0.012,
         "challenge_type": "Recycle"
     }
 ]
