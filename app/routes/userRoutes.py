@@ -46,3 +46,28 @@ def update_user(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+@bp.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    user_list = [
+        {
+            'id': user.id,
+            'name': f'{user.name} {user.lastname}',
+            'email': user.email,
+            'role': 'Administrador' if user.role == 'admin' else 'Usuario',
+            'ecoScore': user.eco_score
+        }
+        for user in users
+    ]
+    return jsonify(user_list)
+
+
+@bp.route('/api/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'Usuario eliminado correctamente'}), 200
+    return jsonify({'message': 'Usuario no encontrado'}), 404
