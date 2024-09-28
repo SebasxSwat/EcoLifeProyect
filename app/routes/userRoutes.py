@@ -54,6 +54,7 @@ def get_users():
     user_list = [
         {
             'id': user.id,
+            'username': user.username,
             'name': f'{user.name} {user.lastname}',
             'email': user.email,
             'role': 'Administrador' if user.role == 'admin' else 'Usuario',
