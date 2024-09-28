@@ -53,6 +53,7 @@ def login():
 
     admins = ['fabianmc', 'fabiannmarinn1@gmail.com']
 
+
     user = User.query.filter_by(username=username).first()
 
     if not user or user.password != password:  
