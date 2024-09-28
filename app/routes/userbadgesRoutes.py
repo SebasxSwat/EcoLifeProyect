@@ -104,8 +104,8 @@ def get_user_badges(user_id):
 
     {
         "name": "Héroe en inicio",
-        "description": "Premio por completar 5 desafíos ecológicos",
-        "required_challenges": 5,
+        "description": "Premio por completar 3 desafíos ecológicos",
+        "required_challenges": 3,
         "eco_points_required": 650,
         "trees_planted_required": 2,
         "water_saved_required": 15,
