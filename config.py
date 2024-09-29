@@ -7,7 +7,7 @@ class Config:
     HOST = os.getenv('RAILWAY_PRIVATE_DOMAIN', 'localhost')
     DATABASE = os.getenv('MYSQL_DATABASE', 'ecolife')
 
-    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{PASSWORD}@{HOST}:3306/{DATABASE}'
+    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{PASSWORD}@{HOST}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = 'smtp.gmail.com'
