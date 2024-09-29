@@ -3,11 +3,12 @@ import os
 class Config:
     
     USER = os.getenv('MYSQLUSER', 'root')
-    PASSWORD = os.getenv('MYSQL_ROOT_PASSWORD', '1234')
-    HOST = os.getenv('RAILWAY_PRIVATE_DOMAIN', 'localhost')
+    PASSWORD = os.getenv('MYSQL_ROOT_PASSWORD', 'qcTcijBSbRspLEWTuSqOZCmXIuiRxeLr')
+    HOST = os.getenv('RAILWAY_PRIVATE_DOMAIN', 'autorack.proxy.rlwy.net')
+    PORT = os.getenv('MYSQL_PORT', 17381)
     DATABASE = os.getenv('MYSQL_DATABASE', 'ecolife')
 
-    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{PASSWORD}@{HOST}'
+    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = 'smtp.gmail.com'
