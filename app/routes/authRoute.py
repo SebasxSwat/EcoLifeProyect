@@ -188,3 +188,4 @@ def update_password():
     db.session.commit()
 
     return jsonify({"message": "Contraseña actualizada con éxito"}), 200
+
