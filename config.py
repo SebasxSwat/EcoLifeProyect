@@ -20,3 +20,6 @@ class Config:
 
     JWT_SECRET_KEY = 'ecolifepassword'
     JWT_ALGORITHM = 'HS256'
+
+
+    
