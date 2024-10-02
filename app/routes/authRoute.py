@@ -189,3 +189,4 @@ def update_password():
 
     return jsonify({"message": "Contraseña actualizada con éxito"}), 200
 
+        
