@@ -10,7 +10,7 @@ def app():
         db.create_all()  # Create tables within the context
         yield app
         db.session.remove()  # Cleanup session objects
-        #db.drop_all()
+        db.drop_all()
   
 
 @pytest.fixture
@@ -20,16 +20,15 @@ def client(app):
 @pytest.fixture
 def user(app):
     username = f"test_user_{uuid.uuid4()}"
+    email = f"test_user_{uuid.uuid4()}@gmail.com"  
     user = User(
         username=username,
         name="Tesst2",
         lastname="Usser2",
         phone="123456789s02",
-        email="fabian@gmail.com",
-        password="test_psssassword2"  # Asegúrate de hashear la contraseña si es necesario
+        email=email,
+        password="test_psssassword2"  
     )
     db.session.add(user)
-    db.session.commit()  # Commit changes within the context
-    yield user    
-  # Cleanup changes within the context
-
+    db.session.commit()  
+    yield user

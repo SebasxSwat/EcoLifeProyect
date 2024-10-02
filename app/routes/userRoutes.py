@@ -6,7 +6,7 @@ bp = Blueprint('user', __name__)
 
 @bp.route('/user/<int:id>', methods=['GET'])
 def get_user(id):
-    user = User.query.get(id)
+    user = db.session.get(User, id)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -27,7 +27,7 @@ def get_user(id):
 def update_user(id):
 
     data = request.json  
-    user = User.query.get(id)
+    user = db.session.get(User, id)
 
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -66,9 +66,9 @@ def get_users():
 
 
 
-@bp.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    user = User.query.get(user_id)
+@bp.route('/users/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    user = db.session.get(User, id)
     if user:
         db.session.delete(user)
         db.session.commit()
@@ -85,11 +85,10 @@ def get_user_count():
 
 @bp.route('/average-carbon-footprint', methods=['GET'])
 def get_average_carbon_footprint():
-    # Obtiene todas las huellas de carbono de los usuarios
+
     total_footprints = db.session.query(db.func.sum(CarbonFootprint.value)).scalar() or 0.0
     user_count = db.session.query(db.func.count(CarbonFootprint.user_id.distinct())).scalar()
 
-    # Calcula el promedio si hay usuarios
     average_footprint = total_footprints / user_count if user_count > 0 else 0.0
     
     return jsonify({'averageCarbonFootprint': average_footprint})
